@@ -1,4 +1,4 @@
-package edu.juniorplus.controller;
+package edu.juniorplus.controller.string;
 
 import edu.juniorplus.domain.User;
 import edu.juniorplus.service.UserService;
@@ -14,6 +14,7 @@ public class BasicUserController extends AbstractUserController{
 	public BasicUserController(UserService userService) {
 		super(userService);
 	}
+
 
 	@Override
 	public String createUser(String data) {
@@ -45,26 +46,5 @@ public class BasicUserController extends AbstractUserController{
 	public String updateUser(String data) {
 		System.out.println("Update user");
 		return data;
-	}
-
-	@Override
-	public String handleRequest(String string) {
-		if (string.startsWith(CREATE)) {
-			return createUser(removeOperation(string, CREATE));
-		}
-		if (string.startsWith(GET)) {
-			return getUser(removeOperation(string, GET));
-		}
-		if (string.startsWith(REMOVE)) {
-			return removeUser(removeOperation(string, REMOVE));
-		}
-		if (string.startsWith(UPDATE)) {
-			return updateUser(removeOperation(string, UPDATE));
-		}
-		throw new IllegalArgumentException("Unsupported operation");
-	}
-
-	private String removeOperation(String string, String operation){
-		return string.substring(operation.length()).trim();
 	}
 }

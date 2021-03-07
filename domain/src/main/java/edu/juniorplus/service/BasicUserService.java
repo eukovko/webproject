@@ -32,7 +32,14 @@ public class BasicUserService extends AbstractUserService {
 
 	@Override
 	public void updateUser(User user) {
+
+		UserEntity userEntity = getUserDao().getUserEntity(user.getId());
+		if (userEntity==null) {
+			throw new IllegalArgumentException();
+		}
+
 		UserEntity entity = userConverter.convert(user);
 		getUserDao().updateUserEntity(entity);
 	}
+
 }

@@ -1,4 +1,4 @@
-package edu.juniorplus.controller;
+package edu.juniorplus.controller.string;
 
 public class EchoController implements UserController{
 
