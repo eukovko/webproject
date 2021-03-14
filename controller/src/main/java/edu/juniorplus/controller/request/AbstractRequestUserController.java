@@ -10,17 +10,23 @@ public abstract class AbstractRequestUserController implements RequestUserContro
 	@Override
 	public Response handleRequest(Request request) {
 		Operation operation = request.getOperation();
-		switch (operation) {
-			case GET:
-				return getUser(request);
-			case POST:
-				return createUser(request);
-			case PUT:
-				return updateUser(request);
-			case DELETE:
-				return removeUser(request);
-			default:
-				throw new IllegalStateException("Unexpected value: " + operation);
+		try {
+			switch (operation) {
+				case GET:
+					return getUser(request);
+				case POST:
+					return createUser(request);
+				case PUT:
+					return updateUser(request);
+				case DELETE:
+					return removeUser(request);
+				default:
+					throw new IllegalStateException("Unexpected value: " + operation);
+			}
+		} catch (Exception e) {
+			Response response = new Response();
+			response.setError(e.getMessage());
+			return response;
 		}
 	}
 }

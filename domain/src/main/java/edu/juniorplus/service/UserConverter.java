@@ -1,15 +1,25 @@
 package edu.juniorplus.service;
 
 import edu.javajunior.entity.UserEntity;
+import edu.juniorplus.domain.Email;
+import edu.juniorplus.domain.Login;
+import edu.juniorplus.domain.Password;
+import edu.juniorplus.domain.PhoneNumber;
 import edu.juniorplus.domain.User;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class UserConverter {
 
 	public UserEntity convert(User user){
-		return new UserEntity(user.getId(), user.getLogin(), user.getEmail(), user.getPassword(), user.getPhoneNumber());
+		List<String> phoneNumbers = user.getPhoneNumbers().stream().map(Objects::toString).collect(Collectors.toList());
+		return new UserEntity(user.getId(), user.getLogin().toString(), user.getEmail().toString(), user.getPassword().toString(), phoneNumbers);
 	}
 
 	public User convert(UserEntity userEntity){
-		return new User(userEntity.getId(), userEntity.getLogin(), userEntity.getEmail(), userEntity.getPassword(), userEntity.getPhoneNumber());
+		List<PhoneNumber> phoneNumbers = userEntity.getPhoneNumber().stream().map(PhoneNumber::new).collect(Collectors.toList());
+		return new User(userEntity.getId(), new Login(userEntity.getLogin()), new Email(userEntity.getEmail()), new Password(userEntity.getPassword()), phoneNumbers);
 	}
 }

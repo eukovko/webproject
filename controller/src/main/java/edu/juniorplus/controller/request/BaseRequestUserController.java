@@ -14,10 +14,6 @@ public class BaseRequestUserController extends AbstractRequestUserController {
 		this.userService = userService;
 	}
 
-	public BaseRequestUserController() {
-
-	}
-
 	@Override
 	public Response createUser(Request request) {
 		Response response = new Response();

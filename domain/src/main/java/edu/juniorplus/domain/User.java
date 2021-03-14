@@ -5,70 +5,59 @@ import java.util.List;
 public class User {
 
 	private Long id;
-	private String login;
-	private String email;
-	private String password;
-	private List<String> phoneNumber;
+	private Login login;
+	private Email email;
+	private Password password;
+	private List<PhoneNumber> phoneNumbers;
 
 	public User() {
 	}
 
-	public User(Long id, String login, String email, String password, List<String> phoneNumber) {
+	public User(Long id, Login login, Email email, Password password, List<PhoneNumber> phoneNumbers) {
 		this.id = id;
 		this.login = login;
 		this.email = email;
 		this.password = password;
-		this.phoneNumber = phoneNumber;
+		this.phoneNumbers = phoneNumbers;
 	}
 
 	public Long getId() {
 		return id;
 	}
 
+	public Login getLogin() {
+		return login;
+	}
+
+	public Email getEmail() {
+		return email;
+	}
+
+	public Password getPassword() {
+		return password;
+	}
+
+	public List<PhoneNumber> getPhoneNumbers() {
+		return phoneNumbers;
+	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public String getLogin() {
-		return login;
-	}
-
-	public void setLogin(String login) {
+	public void setLogin(Login login) {
 		this.login = login;
 	}
 
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
+	public void setEmail(Email email) {
 		this.email = email;
 	}
 
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
+	public void setPassword(Password password) {
 		this.password = password;
 	}
 
-	public List<String> getPhoneNumber() {
-		return phoneNumber;
-	}
-
-	public void setPhoneNumber(List<String> phoneNumber) {
-		this.phoneNumber = phoneNumber;
-	}
-
-	@Override
-	public String toString() {
-		return "User{" +
-			"id=" + id +
-			", login='" + login + '\'' +
-			", email='" + email + '\'' +
-			", password='" + password + '\'' +
-			", phoneNumber=" + phoneNumber +
-			'}';
+	public void setPhoneNumbers(List<PhoneNumber> phoneNumbers) {
+		this.phoneNumbers = phoneNumbers;
 	}
 }
