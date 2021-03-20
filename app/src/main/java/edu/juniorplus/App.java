@@ -11,14 +11,12 @@ public class App
     {
         Request request = new Request();
         request.setOperation(Operation.POST);
-		// TODO: 3/14/2021 Remove id
         request.setPayload("{\n" +
-			"  \"id\": null,\n" +
 			"  \"login\": {\n" +
 			"    \"login\": \"JohnDoe\"\n" +
 			"  },\n" +
 			"  \"email\": {\n" +
-			"    \"address\": \"jdoe@@\",\n" +
+			"    \"address\": \"jdoe\",\n" +
 			"    \"domain\": \"google.com\"\n" +
 			"  },\n" +
 			"  \"password\": {\n" +
@@ -27,8 +25,11 @@ public class App
 			"  \"phoneNumbers\": [\n" +
 			"    {\n" +
 			"      \"phoneNumber\": \"+435(34)324-32-43\"\n" +
-			"    }\n" +
-			"  ]\n" +
+			"    },\n" +
+				"{\n" +
+				"  \"phoneNumber\": \"+435(34)324-32-00\"\n" +
+				"    }\n" +
+				"  ]\n" +
 			"}");
 
         RequestUserController controller = Context.userController();

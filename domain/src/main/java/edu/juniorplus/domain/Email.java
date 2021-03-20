@@ -9,7 +9,7 @@ public final class Email {
 	private static final String EMAIL_REGEX = "^[^@]+@[^@]+\\.[^@]+$";
 	private static final Pattern PATTERN = Pattern.compile(EMAIL_REGEX);
 	private static final String EMAIL_DELIMITER = "@";
-	private String address;
+	private  String address;
 	private String domain;
 
 	public Email() {
@@ -35,14 +35,6 @@ public final class Email {
 
 	public String getDomain() {
 		return domain;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public void setDomain(String domain) {
-		this.domain = domain;
 	}
 
 	@Override
