@@ -21,8 +21,8 @@ public final class PhoneNumber {
 		if (!checkFormat(phoneNumber)) {
 			throw new IllegalArgumentException(FORMAT_ERROR_MESSAGE);
 		}
-		operatorCode = Integer.valueOf(phoneNumber.substring(1, 3));
-		countryCode = Integer.valueOf(phoneNumber.substring(5, 7));
+		countryCode = Integer.valueOf(phoneNumber.substring(1, 4));
+		operatorCode = Integer.valueOf(phoneNumber.substring(5, 7));
 		number = Integer.valueOf(phoneNumber.substring(8,17).replace("-", ""));
 	}
 
@@ -45,6 +45,6 @@ public final class PhoneNumber {
 	@Override
 	public String toString() {
 		String phone = number.toString().replaceAll("(\\d{3})(\\d{2})(\\d{2})", "$1-$2-$3");
-		return String.format("+%d(%d)%s",operatorCode, countryCode, phone);
+		return String.format("+%d(%d)%s", countryCode, operatorCode, phone);
 	}
 }
