@@ -1,24 +1,30 @@
 package edu.juniorplus.domain;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
-public class User {
+public final class User {
 
-	private Long id;
-	private Login login;
-	private Email email;
-	private Password password;
-	private List<PhoneNumber> phoneNumbers;
+	private final Long id;
+	private final Login login;
+	private final Email email;
+	private final Password password;
+	private final List<PhoneNumber> phoneNumbers;
 
-	public User() {
-	}
-
-	public User(Long id, Login login, Email email, Password password, List<PhoneNumber> phoneNumbers) {
+	@JsonCreator
+	public User(@JsonProperty("id") Long id, @JsonProperty("login") Login login, @JsonProperty("email") Email email,
+				@JsonProperty("password") Password password, @JsonProperty("phoneNumbers") List<PhoneNumber> phoneNumbers) {
 		this.id = id;
 		this.login = login;
 		this.email = email;
 		this.password = password;
 		this.phoneNumbers = phoneNumbers;
+	}
+
+	public User withId(Long id) {
+		return new User(id, login, email, password, phoneNumbers);
 	}
 
 	public Long getId() {
@@ -41,23 +47,4 @@ public class User {
 		return phoneNumbers;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public void setLogin(Login login) {
-		this.login = login;
-	}
-
-	public void setEmail(Email email) {
-		this.email = email;
-	}
-
-	public void setPassword(Password password) {
-		this.password = password;
-	}
-
-	public void setPhoneNumbers(List<PhoneNumber> phoneNumbers) {
-		this.phoneNumbers = phoneNumbers;
-	}
 }

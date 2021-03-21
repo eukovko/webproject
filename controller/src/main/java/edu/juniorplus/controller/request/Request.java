@@ -1,9 +1,20 @@
 package edu.juniorplus.controller.request;
 
-import lombok.Data;
+public final class Request {
 
-@Data
-public class Request {
-	private Operation operation;
-	private String payload;
+	private final Operation operation;
+	private final String payload;
+
+	public Request(Operation operation, String payload) {
+		this.operation = operation;
+		this.payload = payload;
+	}
+
+	public Operation getOperation() {
+		return operation;
+	}
+
+	public String getPayload() {
+		return payload;
+	}
 }

@@ -1,5 +1,8 @@
 package edu.juniorplus.domain;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.regex.Pattern;
 
 
@@ -10,25 +13,18 @@ public final class Password {
 	private static final String FORMAT_ERROR_MESSAGE = "Password should contain minimum eight characters, at least one uppercase letter, " +
 		"one lowercase letter, one number and one special character";
 
-	// TODO: 3/14/2021 Change name
-	private String password;
+	private final String value;
 
-	public Password() {
-	}
-
-	public Password(String password) {
-		if (checkFormat(password)) {
+	@JsonCreator
+	public Password(@JsonProperty("value") String value) {
+		if (checkFormat(value)) {
 			throw new IllegalArgumentException(FORMAT_ERROR_MESSAGE);
 		}
-		this.password = password;
+		this.value = value;
 	}
 
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
+	public String getValue() {
+		return value;
 	}
 
 	public static boolean checkFormat(String password) {
@@ -37,6 +33,6 @@ public final class Password {
 
 	@Override
 	public String toString() {
-		return password;
+		return value;
 	}
 }

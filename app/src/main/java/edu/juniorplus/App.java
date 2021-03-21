@@ -9,29 +9,26 @@ public class App
 {
     public static void main( String[] args )
     {
-        Request request = new Request();
-        request.setOperation(Operation.POST);
-		// TODO: 3/14/2021 Remove id
-        request.setPayload("{\n" +
-			"  \"id\": null,\n" +
+		String payload = "{\n" +
 			"  \"login\": {\n" +
-			"    \"login\": \"JohnDoe\"\n" +
+			"    \"value\": \"JohnDoe\"\n" +
 			"  },\n" +
 			"  \"email\": {\n" +
-			"    \"address\": \"jdoe@@\",\n" +
+			"    \"address\": \"jdoe\",\n" +
 			"    \"domain\": \"google.com\"\n" +
 			"  },\n" +
 			"  \"password\": {\n" +
-			"    \"password\": \"132Uds342@#!\"\n" +
+			"    \"value\": \"132Uds342@#!\"\n" +
 			"  },\n" +
 			"  \"phoneNumbers\": [\n" +
 			"    {\n" +
 			"      \"phoneNumber\": \"+435(34)324-32-43\"\n" +
 			"    }\n" +
 			"  ]\n" +
-			"}");
+			"}";
 
-        RequestUserController controller = Context.userController();
+		Request request = new Request(Operation.GET, "15");
+		RequestUserController controller = Context.userController();
 
         Response response = controller.handleRequest(request);
 

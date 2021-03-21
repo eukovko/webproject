@@ -1,18 +1,23 @@
 package edu.juniorplus.service;
 
-import edu.javajunior.dao.UserDao;
+import edu.javajunior.dao.H2PhoneNumberDao;
+import edu.javajunior.dao.H2UserDao;
+import edu.javajunior.entity.PhoneNumberEntity;
 import edu.javajunior.entity.UserEntity;
+import edu.juniorplus.domain.Email;
+import edu.juniorplus.domain.Login;
+import edu.juniorplus.domain.Password;
+import edu.juniorplus.domain.PhoneNumber;
 import edu.juniorplus.domain.User;
 import edu.juniorplus.exception.ServiceLayerException;
 
-import java.util.Optional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class BasicUserService extends AbstractUserService {
 
-	private UserConverter userConverter = new UserConverter();
-
-	public BasicUserService(UserDao userDao) {
-		super(userDao);
+	public BasicUserService(H2UserDao userDao, H2PhoneNumberDao phoneNumberDao) {
+		super(userDao, phoneNumberDao);
 	}
 
 	@Override
@@ -20,19 +25,37 @@ public class BasicUserService extends AbstractUserService {
 		if (user.getId() != null) {
 			throw new ServiceLayerException("New user should not contain id");
 		}
-		UserEntity entity = userConverter.convert(user);
-		UserEntity newUser = getUserDao().createUserEntity(entity);
-		return userConverter.convert(newUser);
+		UserEntity entity = new UserEntity(user.getLogin().toString(), user.getEmail().toString(), user.getPassword().toString());
+		List<PhoneNumber> phoneNumbers = user.getPhoneNumbers();
+		List<PhoneNumberEntity> phoneNumberEntities = phoneNumbers.stream()
+			.map(PhoneNumber::toString)
+			.map(PhoneNumberEntity::new)
+			.collect(Collectors.toList());
+
+		// TODO: 3/21/2021 ACID (Atomicity)
+		// getConnection
+		UserEntity userEntity = getUserDao().createEntity(entity); // pass connection
+		phoneNumberEntities.stream()
+			.map(s-> s.withUserId(userEntity.getId()))
+			.forEach(getPhoneNumberDao()::createEntity); // pass connection
+		// connection commit
+		return user.withId(userEntity.getId());
 	}
 
 	@Override
 	public User getUser(Long id) {
-		UserEntity userEntity = getUserDao().getUserEntity(id);
-
-		if (userEntity == null) {
+		UserEntity user = getUserDao().getEntity(id);
+		List<PhoneNumberEntity> phones = getPhoneNumberDao().getUserEntities(id);
+		if (user == null) {
 			throw new ServiceLayerException("User doesn't exists");
 		}
-		return userConverter.convert(userEntity);
+
+		Login login = new Login(user.getLogin());
+		Email email = new Email(user.getEmail());
+		Password password = new Password(user.getPassword());
+		List<PhoneNumber> numbers = phones.stream().map(PhoneNumberEntity::getPhoneNumber).map(PhoneNumber::new).collect(Collectors.toList());
+
+		return new User(user.getId(), login, email, password, numbers);
 	}
 
 	@Override
@@ -40,7 +63,8 @@ public class BasicUserService extends AbstractUserService {
 		if (getUser(id) == null) {
 			throw new ServiceLayerException("Cannot remove nonexistent user");
 		}
-		getUserDao().removeUserEntity(id);
+		getPhoneNumberDao().removeUserEntities(id);
+		getUserDao().removeEntity(id);
 	}
 
 	@Override
@@ -48,13 +72,17 @@ public class BasicUserService extends AbstractUserService {
 		if (user.getId()!=null) {
 			throw new ServiceLayerException("User should contain id in order to be updated");
 		}
-		UserEntity userEntity = getUserDao().getUserEntity(user.getId());
+		UserEntity userEntity = getUserDao().getEntity(user.getId());
 		if (userEntity==null) {
 			throw new ServiceLayerException("Cannot update nonexistent user");
 		}
-		UserEntity entity = userConverter.convert(user);
-		getUserDao().updateUserEntity(entity);
+		UserEntity entity = new UserEntity(user.getLogin().toString(), user.getEmail().toString(), user.getPassword().toString());
+		getUserDao().updateEntity(entity);
+		getPhoneNumberDao().removeUserEntities(user.getId());
+		user.getPhoneNumbers().stream()
+			.map(PhoneNumber::toString)
+			.map(PhoneNumberEntity::new)
+			.map(s -> s.withUserId(user.getId()))
+			.forEach(getPhoneNumberDao()::createEntity);
 	}
-
-
 }
