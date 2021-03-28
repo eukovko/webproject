@@ -1,0 +1,17 @@
+{
+  "login": {
+    "value": "JohnDoe"
+  },
+  "email": {
+    "address": "jdoe",
+    "domain": "google.com"
+  },
+  "password": {
+    "value": "132Uds342@#!"
+  },
+  "phoneNumbers": [
+    {
+      "phoneNumber": "+342(32)435-32-43"
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 package edu.juniorplus.domain;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.regex.Pattern;
@@ -46,5 +47,9 @@ public final class PhoneNumber {
 	public String toString() {
 		String phone = number.toString().replaceAll("(\\d{3})(\\d{2})(\\d{2})", "$1-$2-$3");
 		return String.format("+%d(%d)%s", countryCode, operatorCode, phone);
+	}
+
+	public String getPhoneNumber() {
+		return toString();
 	}
 }

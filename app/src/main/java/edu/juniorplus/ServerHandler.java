@@ -23,13 +23,16 @@ public class ServerHandler implements HttpHandler {
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
 
+		System.out.println("Handling a request...");
 		String method = exchange.getRequestMethod();
 		Operation operation = Operation.valueOf(method);
 		String requestPayload = readBody(exchange);
 		Request request = new Request(operation, requestPayload);
 
 		Response response = userController.handleRequest(request);
-		String responsePayload = response.getPayload();
+		String responsePayload = response.getPayload() != null ? response.getPayload() : response.getError();
+
+		System.out.printf("%s %s%n", operation.toString(), responsePayload);
 
 		exchange.sendResponseHeaders(200, responsePayload.length());
 		try (OutputStream outputStream = exchange.getResponseBody()) {
@@ -42,7 +45,7 @@ public class ServerHandler implements HttpHandler {
 	protected String readBody(HttpExchange exchange) {
 		String body;
 		try (InputStream inputStream = exchange.getRequestBody();
-			 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();) {
+			 ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
 			int b;
 			while ((b = inputStream.read()) != -1) {
 				outputStream.write(b);
