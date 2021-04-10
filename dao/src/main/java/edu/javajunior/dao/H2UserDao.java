@@ -3,16 +3,23 @@ package edu.javajunior.dao;
 import edu.javajunior.entity.UserEntity;
 import edu.javajunior.exception.DaoException;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class H2UserDao extends H2Dao<UserEntity> {
 
 	private static final String CREATE_USER = "INSERT INTO user (login, email, password) VALUES (?,?,?)";
 	private static final String SELECT_USER = "SELECT id, login, email, password FROM user WHERE id = ?";
+	private static final String SELECT_ALL_USERS = "SELECT id, login, email, password FROM user";
 	private static final String DELETE_USER = "DELETE FROM user WHERE id = ?";
 	private static final String UPDATE_USER = "UPDATE user SET login = ?, email = ?, password = ? WHERE id = ?";
 
@@ -65,6 +72,25 @@ public class H2UserDao extends H2Dao<UserEntity> {
 	}
 
 	@Override
+	public List<UserEntity> getAll() {
+		List<UserEntity> users = new ArrayList<>();
+		try (Connection connection = getConnection();
+			 PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_USERS)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			while (resultSet.next()) {
+				Long userId = resultSet.getLong(1);
+				String login = resultSet.getString(2);
+				String email = resultSet.getString(3);
+				String password = resultSet.getString(4);
+				users.add(new UserEntity(userId, login, email, password));
+			}
+		} catch (SQLException e) {
+			throw new DaoException("Database user fetching error", e);
+		}
+		return users;
+	}
+
+	@Override
 	public void removeEntity(Long id) {
 		try (Connection connection = getConnection();
 			 PreparedStatement preparedStatement = connection.prepareStatement(DELETE_USER)) {
@@ -99,13 +125,15 @@ public class H2UserDao extends H2Dao<UserEntity> {
 				"CREATE TABLE IF NOT EXISTS user\n" +
 					"(\n" +
 					"    id       BIGINT AUTO_INCREMENT,\n" +
-					"    login    VARCHAR(10),\n" +
-					"    email    VARCHAR(20),\n" +
+					"    login    VARCHAR(20),\n" +
+					"    email    VARCHAR(50),\n" +
 					"    password VARCHAR(20),\n" +
 					"    PRIMARY KEY (id)\n" +
 					");";
 			statement.executeUpdate(sql);
-		} catch (SQLException e) {
+			String users = new String(Files.readAllBytes(Paths.get("dao/src/main/resources/user.sql")));
+			statement.executeUpdate(users);
+		} catch (SQLException | IOException e) {
 			throw new DaoException("Error during user dao initialization", e);
 		}
 	}

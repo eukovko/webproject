@@ -3,6 +3,9 @@ package edu.javajunior.dao;
 import edu.javajunior.entity.PhoneNumberEntity;
 import edu.javajunior.exception.DaoException;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -59,6 +62,11 @@ public class H2PhoneNumberDao extends H2Dao<PhoneNumberEntity> {
 			e.printStackTrace();
 		}
 		return phoneNumber;
+	}
+
+	@Override
+	public List<PhoneNumberEntity> getAll() {
+		return null;
 	}
 
 	public List<PhoneNumberEntity> getUserEntities(Long userId) {
@@ -131,7 +139,9 @@ public class H2PhoneNumberDao extends H2Dao<PhoneNumberEntity> {
 					"    FOREIGN KEY (user_id) REFERENCES user (id)\n" +
 					");\n";
 			statement.executeUpdate(sql);
-		} catch (SQLException e) {
+			String phone_number = new String(Files.readAllBytes(Paths.get("dao/src/main/resources/phone_number.sql")));
+			statement.executeUpdate(phone_number);
+		} catch (SQLException | IOException e) {
 			throw new DaoException("Error during phone number dao initialization", e);
 		}
 	}

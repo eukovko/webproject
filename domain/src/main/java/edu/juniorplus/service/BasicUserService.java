@@ -11,6 +11,7 @@ import edu.juniorplus.domain.PhoneNumber;
 import edu.juniorplus.domain.User;
 import edu.juniorplus.exception.ServiceLayerException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,7 +44,7 @@ public class BasicUserService extends AbstractUserService {
 	}
 
 	@Override
-	public User getUser(Long id) {
+	public User getUser(long id) {
 		UserEntity user = getUserDao().getEntity(id);
 		List<PhoneNumberEntity> phones = getPhoneNumberDao().getUserEntities(id);
 		if (user == null) {
@@ -59,7 +60,23 @@ public class BasicUserService extends AbstractUserService {
 	}
 
 	@Override
-	public void removeUser(Long id) {
+	public List<User> getAllUsers() {
+		List<User> result = new ArrayList<>();
+		List<UserEntity> users = getUserDao().getAll();
+		for (UserEntity user : users) {
+			List<PhoneNumberEntity> phones = getPhoneNumberDao().getUserEntities(user.getId());
+			Login login = new Login(user.getLogin());
+			Email email = new Email(user.getEmail());
+			Password password = new Password(user.getPassword());
+			List<PhoneNumber> numbers = phones.stream().map(PhoneNumberEntity::getPhoneNumber).map(PhoneNumber::new).collect(Collectors.toList());
+
+			result.add(new User(user.getId(), login, email, password, numbers));
+		}
+		return result;
+	}
+
+	@Override
+	public void removeUser(long id) {
 		if (getUser(id) == null) {
 			throw new ServiceLayerException("Cannot remove nonexistent user");
 		}

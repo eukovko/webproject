@@ -1,17 +1,13 @@
 package edu.juniorplus;
 
+import com.sun.net.httpserver.HttpHandler;
 import edu.javajunior.dao.H2PhoneNumberDao;
 import edu.javajunior.dao.H2UserDao;
-import edu.juniorplus.controller.request.BaseRequestUserController;
-import edu.juniorplus.controller.request.RequestUserController;
+import edu.juniorplus.controller.handler.UserHandler;
 import edu.juniorplus.service.BasicUserService;
 import edu.juniorplus.service.UserService;
 
 public class Context {
-
-	public static RequestUserController userController() {
-		return new BaseRequestUserController(userService());
-	}
 
 	public static UserService userService() {
 		return new BasicUserService(userDao(), phoneNumberDao());
@@ -25,4 +21,7 @@ public class Context {
 		return new H2PhoneNumberDao();
 	}
 
+	public static HttpHandler handler() {
+		return new UserHandler(userService());
+	}
 }

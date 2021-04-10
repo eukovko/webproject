@@ -10,8 +10,6 @@ import java.sql.SQLException;
 public abstract class H2Dao<E extends Entity> implements Dao<E> {
 
 	private static final String DB_URL = "jdbc:h2:mem:app;DB_CLOSE_DELAY=-1";
-//	private static final String DB_URL = "jdbc:h2:C:\\examples\\webproject\\app";
-//	private static final String DB_URL = "jdbc:h2:./app";
 	private static final String DRIVER_NAME = "org.h2.Driver";
 
 	public H2Dao() {
