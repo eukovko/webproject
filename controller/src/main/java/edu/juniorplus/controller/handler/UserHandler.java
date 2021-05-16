@@ -14,6 +14,8 @@ import java.util.regex.Pattern;
 
 // TODO: 4/10/2021 Create a main handler which will process all the requests and will handle it down based on the path
 //  e.g exchange.getRequestURI().getPath().startsWith("/phones");
+
+// TODO: 5/16/2021 Create a page where you can create a user with a form !!!
 public class UserHandler extends AbstractHandler {
 
 	private static final String INCORRECT_PATH_MESSAGE = "Incorrect path";

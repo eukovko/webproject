@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>This is the response from our server</h1>
+<a href="/hello?user=IndexUser">Hello there!</a>
+
+
+
+<br><br>
+<h2>Get form</h2>
+<form action="/hello" method="GET">
+    <label for="getUserName">Enter your name:</label>
+    <input id="getUserName" type="text" name="user">
+    <br>
+    <label for="getUserPassword">Enter your password:</label>
+    <input id="getUserPassword" type="password" name="password">
+    <br>
+    <input type="submit" value="Say hello">
+</form>
+
+
+
+<br><br>
+<h2>Post form</h2>
+<form action="/hello" method="POST">
+    <label for="postUserName">Enter your name:</label>
+    <input id="postUserName" type="text" name="user">
+    <br>
+    <input type="submit" value="Say hello">
+</form>
+</body>
+</html>
